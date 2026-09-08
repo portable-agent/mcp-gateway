@@ -4,7 +4,6 @@ const connectorSchema = z.object({
     name: z.string().min(1),
     url: z.url(),
     tools: z.array(z.string().min(1)).min(1),
-    scope: z.string().min(1),
 });
 
 const connectorsSchema = z
@@ -28,6 +27,10 @@ const settingsSchema = z.object({
     HOST: z.string().min(1).default('0.0.0.0'),
     PORT: z.coerce.number().int().min(1).max(65_535).default(8080),
     CALL_TIMEOUT_MS: z.coerce.number().int().positive().default(10_000),
+    OIDC_ISSUER: z.url(),
+    OIDC_JWKS_URL: z.url(),
+    OIDC_AUDIENCE: z.string().min(1),
+    OIDC_REQUIRED_SCOPE: z.string().min(1),
     MCP_CONNECTORS_JSON: z.string().min(1),
 });
 
@@ -38,6 +41,14 @@ export type Settings = {
     port: number;
     callTimeoutMs: number;
     connectors: ConnectorSettings[];
+    oidc: OidcSettings;
+};
+
+export type OidcSettings = {
+    issuer: string;
+    jwksUrl: string;
+    audience: string;
+    requiredScope: string;
 };
 
 export function readSettings(env: NodeJS.ProcessEnv): Settings {
@@ -55,5 +66,11 @@ export function readSettings(env: NodeJS.ProcessEnv): Settings {
         port: values.PORT,
         callTimeoutMs: values.CALL_TIMEOUT_MS,
         connectors: connectorsSchema.parse(rawConnectors),
+        oidc: {
+            issuer: values.OIDC_ISSUER,
+            jwksUrl: values.OIDC_JWKS_URL,
+            audience: values.OIDC_AUDIENCE,
+            requiredScope: values.OIDC_REQUIRED_SCOPE,
+        },
     };
 }

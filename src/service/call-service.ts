@@ -3,7 +3,11 @@ import type { ConnectorSettings } from '../config/settings.js';
 import { CallError } from '../model/call-error.js';
 import type { CallRequest, CallResult } from '../model/call.js';
 
-export class CallService {
+export interface CallUseCase {
+    call(this: void, request: CallRequest, token: string): Promise<CallResult>;
+}
+
+export class CallService implements CallUseCase {
     private readonly connectors: Map<string, ConnectorSettings>;
 
     public constructor(
