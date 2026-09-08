@@ -4,7 +4,7 @@
         "module": "NodeNext",
         "moduleResolution": "NodeNext",
         "lib": ["ES2024"],
-        "rootDir": ".",
+        "rootDir": "src",
         "outDir": "dist",
         "strict": true,
         "noUncheckedIndexedAccess": true,
@@ -18,7 +18,7 @@
         "skipLibCheck": true,
         "sourceMap": true,
         "declaration": true,
-        "types": ["node", "vitest/globals"]
+        "types": ["node"]
     },
-    "include": ["src/**/*.ts", "tests/**/*.ts", "vitest.config.ts", "eslint.config.js"]
+    "include": ["src/**/*.ts"]
 }

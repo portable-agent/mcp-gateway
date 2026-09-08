@@ -9,5 +9,5 @@ export type McpCall = {
 };
 
 export interface McpCaller {
-    call(request: McpCall): Promise<CallResult>;
+    call(this: void, request: McpCall): Promise<CallResult>;
 }

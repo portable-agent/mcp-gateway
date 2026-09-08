@@ -32,7 +32,7 @@ describe('CallService', () => {
         const result = await service.call(request, 'Bearer test-token');
 
         expect(result).toEqual({ data: { eventId: 'event-123' } });
-        expect(caller.call).toHaveBeenCalledWith(
+        expect(vi.mocked(caller.call)).toHaveBeenCalledWith(
             expect.objectContaining({
                 url: 'http://calendar-mcp:8080/mcp',
                 tool: 'create_event',

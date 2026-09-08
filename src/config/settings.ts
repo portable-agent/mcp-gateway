@@ -7,19 +7,22 @@ const connectorSchema = z.object({
     scope: z.string().min(1),
 });
 
-const connectorsSchema = z.array(connectorSchema).min(1).superRefine((connectors, context) => {
-    const names = new Set<string>();
+const connectorsSchema = z
+    .array(connectorSchema)
+    .min(1)
+    .superRefine((connectors, context) => {
+        const names = new Set<string>();
 
-    for (const connector of connectors) {
-        if (names.has(connector.name)) {
-            context.addIssue({
-                code: 'custom',
-                message: 'Connector names must be unique',
-            });
+        for (const connector of connectors) {
+            if (names.has(connector.name)) {
+                context.addIssue({
+                    code: 'custom',
+                    message: 'Connector names must be unique',
+                });
+            }
+            names.add(connector.name);
         }
-        names.add(connector.name);
-    }
-});
+    });
 
 const settingsSchema = z.object({
     HOST: z.string().min(1).default('0.0.0.0'),
