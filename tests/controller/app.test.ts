@@ -53,6 +53,7 @@ describe('createApp', () => {
         const response = await app.inject({ method: 'POST', url: '/api/v1/calls', payload: body });
 
         expect(response.statusCode).toBe(401);
+        expect(response.headers['content-type']).toMatch(/^application\/problem\+json/);
         expect(response.json()).toMatchObject({
             type: 'https://portable-agent.dev/problems/not-authenticated',
             status: 401,

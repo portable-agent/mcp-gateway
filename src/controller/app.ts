@@ -1,4 +1,4 @@
-import Fastify, { type FastifyInstance } from 'fastify';
+import Fastify, { type FastifyInstance, type FastifyReply } from 'fastify';
 import { z, ZodError } from 'zod';
 
 import type { TokenVerifier } from '../config/oidc-token-verifier.js';
@@ -67,15 +67,13 @@ function bearerToken(authorization: string | undefined): string {
     return match[1];
 }
 
-function problem(
-    reply: { code(status: number): { send(body: unknown): unknown } },
-    status: number,
-    type: string,
-    title: string,
-) {
-    return reply.code(status).send({
-        type: `https://portable-agent.dev/problems/${type}`,
-        title,
-        status,
-    });
+function problem(reply: FastifyReply, status: number, type: string, title: string) {
+    return reply
+        .code(status)
+        .type('application/problem+json')
+        .send({
+            type: `https://portable-agent.dev/problems/${type}`,
+            title,
+            status,
+        });
 }
