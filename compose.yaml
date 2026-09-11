@@ -1,0 +1,22 @@
+services:
+    mcp-gateway:
+        build: .
+        ports:
+            - '18083:8080'
+        environment:
+            HOST: 0.0.0.0
+            PORT: 8080
+            CALL_TIMEOUT_MS: 10000
+            OIDC_ISSUER: http://localhost:8081/realms/portable-agent
+            OIDC_JWKS_URL: http://host.docker.internal:8081/realms/portable-agent/protocol/openid-connect/certs
+            OIDC_AUDIENCE: mcp-gateway
+            OIDC_REQUIRED_SCOPE: mcp:call
+            MCP_CONNECTORS_JSON: >-
+                [{"name":"fake-calendar","url":"http://host.docker.internal:18082/mcp","tools":["create_event"]}]
+        extra_hosts:
+            - 'host.docker.internal:host-gateway'
+        read_only: true
+        tmpfs:
+            - /tmp
+        security_opt:
+            - no-new-privileges:true
