@@ -11,6 +11,7 @@ const body = {
     tool: 'create_event',
     input: { title: 'Demo' },
     requestKey: 'request-123',
+    context: { actorId: '28efc74e-e82b-4ea2-9143-4dc24c13fe0d' },
 };
 
 describe('createApp', () => {

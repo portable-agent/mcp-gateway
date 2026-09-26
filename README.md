@@ -12,6 +12,7 @@ MCP Gateway — единая безопасная точка, через кот�
 - MCP Streamable HTTP через официальный TypeScript SDK v2;
 - ограничение полного времени вызова;
 - безопасные публичные ошибки без ответа внешнего провайдера;
+- доверенный `context.actorId`, который передаётся MCP tool как защищённый `actor_id`;
 - unit и HTTP-тесты, строгий TypeScript, ESLint, Prettier и coverage gate.
 
 ## Стек

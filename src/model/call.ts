@@ -4,6 +4,11 @@ export type CallRequest = {
     tool: string;
     input: Record<string, unknown>;
     requestKey: string;
+    context?:
+        | {
+              actorId: string;
+          }
+        | undefined;
 };
 
 export type CallResult = {
