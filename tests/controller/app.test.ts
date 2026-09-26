@@ -48,6 +48,25 @@ describe('createApp', () => {
         expect(call).toHaveBeenCalledWith(body, 'Bearer test-token');
     });
 
+    it('call_withCanonicalKeycloakActorId_shouldCallService', async () => {
+        const call = vi.fn().mockResolvedValue({});
+        const app = appWith({ call });
+        const request = {
+            ...body,
+            context: { actorId: '22222222-2222-2222-2222-222222222222' },
+        };
+
+        const response = await app.inject({
+            method: 'POST',
+            url: '/api/v1/calls',
+            headers: { authorization: 'Bearer test-token' },
+            payload: request,
+        });
+
+        expect(response.statusCode).toBe(200);
+        expect(call).toHaveBeenCalledWith(request, 'Bearer test-token');
+    });
+
     it('call_withoutToken_shouldReturn401', async () => {
         const app = appWith();
 

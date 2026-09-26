@@ -15,7 +15,7 @@ const callSchema = z
         requestKey: z.string().min(8).max(128),
         context: z
             .object({
-                actorId: z.uuid(),
+                actorId: z.guid(),
             })
             .strict()
             .optional(),
