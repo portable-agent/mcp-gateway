@@ -27,13 +27,18 @@ export class CallService implements CallUseCase {
             throw new CallError('TOOL_NOT_ALLOWED', 'Tool is not allowed');
         }
 
+        const input = { ...request.input };
+        delete input.request_key;
+        delete input.actor_id;
+        input.request_key = request.requestKey;
+        if (request.context !== undefined) {
+            input.actor_id = request.context.actorId;
+        }
+
         return this.caller.call({
             url: connector.url,
             tool: request.tool,
-            input: {
-                ...request.input,
-                request_key: request.requestKey,
-            },
+            input,
             token,
             timeoutMs: this.timeoutMs,
         });

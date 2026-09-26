@@ -8,8 +8,9 @@ const request = {
     actionId: '5d41fba4-b49f-413f-9cb8-17a03e2147b6',
     connector: 'fake-calendar',
     tool: 'create_event',
-    input: { title: 'Demo' },
+    input: { title: 'Demo', actor_id: 'untrusted-value' },
     requestKey: 'request-123',
+    context: { actorId: '28efc74e-e82b-4ea2-9143-4dc24c13fe0d' },
 };
 
 describe('CallService', () => {
@@ -39,7 +40,30 @@ describe('CallService', () => {
                 input: {
                     title: 'Demo',
                     request_key: 'request-123',
+                    actor_id: '28efc74e-e82b-4ea2-9143-4dc24c13fe0d',
                 },
+            }),
+        );
+    });
+
+    it('call_withoutContext_shouldKeepFakeConnectorCompatible', async () => {
+        const caller: McpCaller = { call: vi.fn().mockResolvedValue({}) };
+        const service = new CallService(
+            [
+                {
+                    name: 'fake-calendar',
+                    url: 'http://calendar-mcp:8080/mcp',
+                    tools: ['create_event'],
+                },
+            ],
+            caller,
+        );
+
+        await service.call({ ...request, context: undefined, input: { title: 'Demo' } }, 'Bearer test-token');
+
+        expect(vi.mocked(caller.call)).toHaveBeenCalledWith(
+            expect.objectContaining({
+                input: { title: 'Demo', request_key: 'request-123' },
             }),
         );
     });

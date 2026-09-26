@@ -13,6 +13,12 @@ const callSchema = z
         tool: z.string().min(1).max(100),
         input: z.record(z.string(), z.unknown()),
         requestKey: z.string().min(8).max(128),
+        context: z
+            .object({
+                actorId: z.uuid(),
+            })
+            .strict()
+            .optional(),
     })
     .strict();
 
